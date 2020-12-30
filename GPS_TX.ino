@@ -51,11 +51,9 @@ void loop()
         newData = true;
     }
   }
-
-//  Serial.println("IS THIS NEW DATA?");
+  
   if (newData)
   {
-//    Serial.println("PRINTING NEW DATA");
     float flat, flon;
     unsigned long age;
     gps.f_get_position(&flat, &flon, &age);
@@ -80,14 +78,6 @@ void loop()
     LoRa.print(":");
     LoRa.print(gps.satellites());
     LoRa.endPacket();
-    
-    // pring packet on OLED screen
-//    u8x8.setCursor(0, 3);
-//    u8x8.print("LAT: ");
-//    u8x8.print(flat);
-//    u8x8.setCursor(0, 4);
-//    u8x8.print("LNG: ");
-//    u8x8.print(flon);
   }
   
   gps.stats(&chars, &sentences, &failed);

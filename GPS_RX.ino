@@ -13,9 +13,8 @@ String RxRSSI;
 
 void setup() {
   Serial.begin(9600);
-  //while (!Serial);
   
-  Serial.println("LoRa Rx Test");
+  Serial.println("LoRa Rx");
   
   u8x8.begin();
   u8x8.setFont(u8x8_font_chroma48medium8_r);

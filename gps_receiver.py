@@ -1,29 +1,20 @@
 import csv
 import time
 import math
-import gmaps
 import serial
 import gmplot
-import requests
-# import schedule
 from datetime import datetime
-# from rest_framework.decorators import api_view
-from django.views.decorators.csrf import csrf_exempt
 
 LORA_PORT = '/dev/cu.SLAB_USBtoUART'
-# URL = 'http://localhost:5000/'
 BAUD_RATE = 9600
-PLOT_RATE = 1
+PLOT_RATE = 1  # Used to define how frequently to plot map location. 1 in PLOT_RATE iterations of the loop
 FEET_PER_METER = 3.28084
+FILE_PATH = ""  # Insert your local file path here. Each file will be named using the current timestamp
 
 def main_func(file_writer, counter, prev_values):
     arduino = serial.Serial(LORA_PORT, BAUD_RATE)
-    # arduino.flushInput()
-    # arduino.flushOutput()
-    time.sleep(2)
-    # print('Established serial connection to LoRa module')
-    arduino_data = arduino.readline()[:-2].decode("utf-8")
-    # print("Arduino Data: ", arduino_data)
+    time.sleep(2)  # Wait to buffer the next packet before reading. This timing is arbitrary, so anticipate occasional errors.
+    arduino_data = arduino.readline()[:-2].decode("utf-8")  # Decode the packet into readable text
     list_values = str(arduino_data[0:len(arduino_data)]).split(':')
 
     dict_values = {
@@ -52,7 +43,6 @@ def main_func(file_writer, counter, prev_values):
     arduino_data = 0
     arduino.close()
     return dict_values
-    # print('Connection closed')
     print('<----------------------------->')
 
 def calc_speed(values, prev_values):
@@ -72,6 +62,7 @@ def show_map(values):
     latitude_list.append(values['lat'])
     longitude_list.append(values['lng'])
       
+    # For the below, uncomment the two lines and comment the corresponding two lines if you'd like to plot all locations at once. Leave as-is if you'd only like to plot the current location
     gmap = gmplot.GoogleMapPlotter(values['lat'], values['lng'], 17) 
     # gmap.scatter(latitude_list, longitude_list, '#FF0000', size = 5, marker = False)
     gmap.scatter([values['lat']], [values['lng']], '#FF0000', size = 2, marker = False)
@@ -85,28 +76,22 @@ def show_map(values):
 
 latitude_list = []
 longitude_list = []
-# marker_locations = []
 
 now = str(datetime.now(tz=None))
-file_name = "/Users/Djwestrich/Desktop/programs/raspberrypi/gps/gps_received_data/" + now + ".csv"
+file_name = FILE_PATH + now + ".csv"
 with open(file_name, 'w') as ofile:
     writer = csv.writer(ofile, delimiter='\t')
     writer.writerow(['timestamp', 'lat', 'lng', 'alt', 'sat', 'rssi'])
 
     print('Program started')
 
-    # Setting up the Arduino
-    # schedule.every(1).seconds.do(main_func)
-
     prev_values = {}
     counter = 1
     while True:
-        # schedule.run_pending()
         try:
             prev_values = main_func(writer, counter, prev_values)
         except Exception as e:
             print("Error: ", e)
             pass
-        # time.sleep(1)
         counter += 1
 

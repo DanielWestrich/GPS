@@ -50,8 +50,8 @@ def main_func(file_writer, counter, prev_values, driver):
 
     arduino_data = 0
     arduino.close()
-    return dict_values
     print('<----------------------------->')
+    return dict_values
 
 def calc_speed(values, prev_values):
     distance = float(math.sqrt(

@@ -107,7 +107,7 @@ with open(file_name, 'w') as ofile:
     counter = 1
     while True:
         try:
-            prev_values = main_func(writer, counter, prev_values)
+            prev_values = main_func(writer, counter, prev_values, driver)
         except Exception as e:
             print("Error: ", e)
             pass

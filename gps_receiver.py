@@ -92,7 +92,7 @@ latitude_list = []
 longitude_list = []
 
 now = str(datetime.now())
-file_name = "/Users/Djwestrich/Desktop/programs/raspberrypi/gps/gps_received_data/" + now + ".csv"
+file_name = "YOUR_FILE_PATH/" + now + ".csv"  # Add your file path to subfolder to store GPS data once this script is closed. This data can later be plotted in an online tool.
 with open(file_name, 'w') as ofile:
     writer = csv.writer(ofile)
     writer.writerow(['timestamp', 'lat', 'lng', 'alt', 'speed', 'sat', 'rssi'])
@@ -100,7 +100,7 @@ with open(file_name, 'w') as ofile:
     print('Program started')
 
     driver = webdriver.Chrome(ChromeDriverManager().install())
-    driver.get('file:///Users/Djwestrich/Desktop/programs/raspberrypi/gps/index.html')
+    driver.get('YOUR_FILE_PATH/index.html')  # Add your file path to index.html that this script generates
     print("Opened Map")
 
     prev_values = {}
